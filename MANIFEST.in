@@ -1,0 +1,3 @@
+include doorkeeper/config/deployment.ini_tmpl
+recursive-include doorkeeper/public *
+recursive-include doorkeeper/templates *
