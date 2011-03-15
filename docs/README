@@ -1,0 +1,51 @@
+--------------
+Page Flow
+--------------
+if not configured,site admin register():
+  email
+  passwd
+  possible reuse login page
+
+else
+  if not env["user"]:  
+    login()
+  else:
+    main()
+
+login & register:
+  if login successfully:
+    redirect to main()
+
+  if register succesfully:
+    redirect to login()
+
+main():
+left side:
+  if admin in env['user'].role:
+    list um() (user management)
+  elif user in env['user'].role:
+    list km() (key management)
+
+default to km()
+
+
+um():
+  
+  tab["user"]:
+    userid, email(s), roles
+
+  tab["role"]: # only show when site_admin in role
+    role, priviledge
+
+  ** priviledge are predefined **
+
+
+km():
+  my_keys():
+    key: expire, download,
+    apply a new one
+  
+
+YUI 3: Below the Surface
+http://lanyrd.com/2010/yuiconf/spfp/
+
