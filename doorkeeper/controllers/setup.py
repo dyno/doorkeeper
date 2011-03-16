@@ -10,7 +10,8 @@ log = logging.getLogger(__name__)
 class SetupController(BaseController):
 
     def index(self):
-        # Return a rendered template
-        #return render('/setup.mako')
-        # or, return a string
-        return 'Hello World'
+        return render('/setup.mako')
+
+    def init(self):
+        print request.params["admin_passwd"]
+        return "your master secret: %s" % request.params["admin_passwd"]
