@@ -1,113 +1,146 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd">
-<head>
-<style type="text/css">
-body {
-  margin:0;
-  padding:0;
-}
-</style>
+<%inherit file="base.html"/>
 
-<link type="text/css" rel="stylesheet" href="/yui/3.3.0/cssfonts/fonts-min.css">
-<script type="text/javascript" src="/yui/3.3.0/yui/yui-min.js"></script>
+<%def name="body()">
+<div class="yui3-g" style="height:40em;">
+    <div class="yui3-u-1-5" >
+	<div id="side" class="yui3-menu" role="menu">
+	    <div class="yui3-menu-content">
+		<ul class="first-of-type">
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("System")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("User")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Key")}</a></li>
+		</ul>
+	   </div>
+	</div>
+    </div>
 
-<style id="yui3-style-overrides">
-  #main #example-canvas .yui3-tabview .yui3-tab-selected a {
-  color:white;
-}
-</style>
-</head>
+    <div class="yui3-u-4-5">
+	<div  id="content">
+	    <ul>
+		<li><a href="#tab_login" class="tablabel"> ${_('Login')} </a></li>
+		<li><a href="#tab_register" class="tablabel"> ${_('Register')} </a></li>
+	    </ul>
 
-<body class="yui3-skin-sam">
-<div id="panel">
-    <ul>
-        <li><a href="#login">Login</a></li>
-        <li><a href="#register">Register</a></li>
-    </ul>
-    <div>
-        <div id="login">
-            <p>login content</p>
-        </div>
+	    <div>
+		<div id="tab_login">
+		    <form id="loginform" action="main/auth" method="post">
+			<div>
+			    <label for="username">${_("Username/Email")} : &nbsp;</label>
+			    <input id="username" name="username" type="text"/>
+			</div>
+			<div>
+			    <label for="passwd">${_("Password")} : &nbsp;</label>
+			    <input id="passwd" name="passwd" type="password"/>
+			</div>
+			<div class="submit">
+			    <label for="submit">&nbsp;</label>
+			    <button type="button" id="submit">${_("Submit")}</button>
+			</div>
+		    </form>
+		</div>
 
-        <div id="register">
-            <p>register content</p>
+		<div id="tab_register">
+		    <form id="registerform" action="main/register" method="post">
+			<div>
+			    <label for="username">${_("Username")} : &nbsp;</label>
+			    <input id="username" name="username" type="text"/>
+			</div>
+			<div>
+			    <label for="passwd">${_("Password")} : &nbsp;</label>
+			    <input id="passwd" name="passwd" type="password"/>
+			</div>
+			<div>
+			    <label for="passwd2">${_("Repeat Password")} : &nbsp;</label>
+			    <input id="passwd2" name="passwd" type="password"/>
+			</div>
+			<div>
+			    <label for="email">${_("Email")} : &nbsp;</label>
+			    <input id="email" name="email" type="text"/>
+			</div>
+			<div>
+			    <label for="phone_mobile">${_("Mobile Phone")} : &nbsp;</label>
+			    <input id="phone_mobile" name="phone_mobile" type="text"/>
+			</div>
+			<div>
+			    <label for="phone_office">${_("Office Phone")} : &nbsp;</label>
+			    <input id="phone_office" name="phone_office" type="text"/>
+			</div>
+			<div>
+			    <label for="phone_home">${_("Home Phone")} : &nbsp;</label>
+			    <input id="phone_home" name="phone_home" type="text"/>
+			</div>
+			<div>
+			    <label for="org">${_("Organization")} : &nbsp;</label>
+			    <input id="org" name="org" type="text"/>
+			</div>
+			<div>
+			    <label for="title">${_("Title")} : &nbsp;</label>
+			    <input id="title" name="title" type="text"/>
+			</div>
+			<div>
+			    <label for="addr">${_("Address")} : &nbsp;</label>
+			    <input id="addr" name="addr" type="text"/>
+			</div>
+		    
+			<div class="submit">
+			    <label for="submit">&nbsp;</label>
+			    <button type="button" id="submit">${_("Submit")}</button>
+			</div>
+		    </form>
+		</div>
+
+	    </div>
         </div>
     </div>
 </div>
 
-<div id="loginDialog">
-<div class="hd">Login</div>
-  <div class="bd">
-     <form method="POST" action="/login">
-       <div class="smallTitle">Welcome to the Xxxxxx Management System.</div>
-       <br/>
-          <div class="smallText">
-          <table cellpadding="0" cellspacing="0" border="0">
-          <tr>
-   <td style="width: 80px"><label for="username">Name:</label></td>
-   <td><input type="text" name="username" class="textBox" /></td>
-          </tr>
-          <tr>
-   <td><label for="password">Password:</label></td>
-   <td><input type="password" name="password" class="textBox" /></td>
-          </tr>
-          <tr>
-   <td colspan="2"><div id="loginError">Invalid login.</div></td>
-          </tr>
-          </table>
-       </div>
-    </form>
-  </div>
-</div>
-
-</body>
-
+<script src="/yui/3.3.0/yui/yui-min.js"> </script>
 <script type="text/javascript">
-YUI({ filter: 'raw' }).use("yui", "tabview", function(Y) {
-    var tabview = new Y.TabView({srcNode:'#panel'});
-    tabview.render();
+//left menu
+YUI({ filter: 'raw' }).use("node-menunav", function(Y) {
+    var menu = Y.one("#side");
+    menu.plug(Y.Plugin.NodeMenuNav);
+    menu.get("ownerDocument").get("documentElement").removeClass("yui3-loading");
 });
 
-var handleLogin = function() {
-   this.submit();
-};
-            
-var handleLoginSuccess = function(o) {
-    if (o.responseText == "success") {
-       getListings();
-    } else {
-       Initialize(true);
-    }
-};
+//right tab panel
+YUI({ filter: 'raw' }).use("yui", "tabview", function(Y) {
+    var tabview = new Y.TabView({srcNode:'#content'});
+    tabview.render();
+});   
 
-var handleLoginFailure = function(o) {
-    alert("Submission failed: " + o.status);
-};
+//interact with server
+YUI({filter: "raw"}).use("io-form", "json-parse", function(Y) {
+    var onSuccess = function(id, response, args) {
+	data = Y.JSON.parse(response.responseText);
+	if(data.status == "failed") {
+	    alert("failed");
+	} else {
+	    Y.config.win.location = "/main/index";
+	}
+    };
 
-// Instantiate the Dialog
-var loginDialog = new YAHOO.widget.Dialog("loginDialog", 
-{ 
-    width : "340px",
-    fixedcenter : true,
-    visible : false, 
-    constraintoviewport : true,
-    draggable : true,
-    buttons : [ { text:"Login", handler:handleLogin, isDefault:true }]
-} );
-       
-loginDialog.callback = { success: handleLoginSuccess,
-                         failure: handleLoginFailure };
-			   
-// Validate the entries in the form to require that both first and last name are entered
-loginDialog.validate = function() {
-    var data = this.getData();
-    if (data.username == "" || data.password == "") {
-	alert("Please enter a username and password.");
-	return false;
-    } else {
-	return true;
-    }
-};
+    var onFailure = function(id, response, args) {
+	alert("sorry!");
+    };
 
+    var onClick = function(e) {
+	var cfg = {
+	    method: "POST",
+	    form: {
+		id: "loginform",
+	    },
+	};
+
+        Y.io('/auth/login', cfg);
+        Y.on('io:success', onSuccess, this);
+        Y.on('io:failure', onFailure, this);
+    };
+
+    Y.on("click", onClick, "#submit", this, true);
+}); 
 </script>
+
+</%def>
+
 
