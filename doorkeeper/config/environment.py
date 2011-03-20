@@ -9,7 +9,7 @@ from sqlalchemy import engine_from_config
 import doorkeeper.lib.app_globals as app_globals
 import doorkeeper.lib.helpers
 from doorkeeper.config.routing import make_map
-from doorkeeper.model import init_model
+import doorkeeper.model as model
 
 def load_environment(global_conf, app_conf):
     """Configure the Pylons environment via the ``pylons.config``
@@ -46,9 +46,14 @@ def load_environment(global_conf, app_conf):
 
     # Setup the SQLAlchemy database engine
     engine = engine_from_config(config, 'sqlalchemy.')
-    init_model(engine)
+    model.init_model(engine)
+    
+    #init system parameters
+    q = model.Session.query(model.DKSystem)
+    config['pylons.app_globals'].system_params = dict([(e.key, e.val) for e in q.all()])
 
     # CONFIGURATION OPTIONS HERE (note: all config options will override
     # any Pylons config options)
     
     return config
+
