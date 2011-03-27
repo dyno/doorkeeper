@@ -16,13 +16,15 @@ def load_environment(global_conf, app_conf):
     object
     """
     config = PylonsConfig()
-    
+
     # Pylons paths
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     paths = dict(root=root,
                  controllers=os.path.join(root, 'controllers'),
                  static_files=os.path.join(root, 'public'),
-                 templates=[os.path.join(root, 'templates')])
+                 templates=[os.path.join(root, 'templates')],
+                 cpkdir=os.path.join(root,'cpk'),
+            )
 
     # Initialize config with the basic options
     config.init_app(global_conf, app_conf, package='doorkeeper', paths=paths)
@@ -30,11 +32,11 @@ def load_environment(global_conf, app_conf):
     config['routes.map'] = make_map(config)
     config['pylons.app_globals'] = app_globals.Globals(config)
     config['pylons.h'] = doorkeeper.lib.helpers
-    
+
     # Setup cache object as early as possible
     import pylons
     pylons.cache._push_object(config['pylons.app_globals'].cache)
-    
+
 
     # Create the Mako TemplateLookup, with the default auto-escaping
     config['pylons.app_globals'].mako_lookup = TemplateLookup(
@@ -47,13 +49,13 @@ def load_environment(global_conf, app_conf):
     # Setup the SQLAlchemy database engine
     engine = engine_from_config(config, 'sqlalchemy.')
     model.init_model(engine)
-    
+
     #init system parameters
     q = model.Session.query(model.DKSystem)
     config['pylons.app_globals'].system_params = dict([(e.key, e.val) for e in q.all()])
 
     # CONFIGURATION OPTIONS HERE (note: all config options will override
     # any Pylons config options)
-    
+
     return config
 
