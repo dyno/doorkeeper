@@ -13,19 +13,33 @@ body {
   margin-top: 10px;
 }
 
+/*
 h1 {
   text-align: left;
-  background-color: #ccc;
   padding: .25em;
   color: #000;
 }
+*/
 
-#footer {
-  border-top: solid 1px #000;
-  font-size: 85%;
-  padding-top: .25em;
+#header h1 {
+    text-align: center;
+    padding: 2em;
+    background-color: #ccc;
+    background-image: url("/cpk-logo.png");
+    background-repeat: no-repeat;
+    overflow: hidden;
 }
 
+#footer {
+    font-size: 85%;
+    background-color: #ccc;
+    border-top: solid 1px #000;
+    padding-top: .25em;
+    border-bottom: solid 1px #000;
+    padding-bottom: .25em;
+}
+
+/*
 form, form div {
   margin: .5em 0;
 }
@@ -37,6 +51,7 @@ p.first-of-type {
 .yui3-loading #services {
   display: none;
 }
+*/
 
 label {
   width: 30%;
@@ -56,5 +71,22 @@ label {
 
 .submit {
     text-align: left;
+}
+
+/* -------------------------- */
+.aui-paginator-container {
+    margin: 30px;
+}
+
+.contentA, .contentB {
+    border:2px solid #CCCCCC;
+    font-size:15px;
+    margin:-10px 40px;
+    padding:10px;
+    width:534px;
+}
+
+.contentA div {
+    display: none;
 }
 

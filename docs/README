@@ -1,13 +1,16 @@
 --------------
 Page Flow
 --------------
+login default admin account.
+=> system initialization
+
 if not configured,site admin register():
   email
   passwd
   possible reuse login page
 
 else
-  if not env["user"]:  
+  if not session["user"]:  
     login()
   else:
     main()
@@ -30,7 +33,6 @@ default to km()
 
 
 um():
-  
   tab["user"]:
     userid, email(s), roles
 
@@ -44,7 +46,6 @@ km():
   my_keys():
     key: expire, download,
     apply a new one
-  
 
 YUI 3: Below the Surface
 http://lanyrd.com/2010/yuiconf/spfp/

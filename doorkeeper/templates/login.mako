@@ -81,7 +81,7 @@
 			    <label for="addr">${_("Address")} : &nbsp;</label>
 			    <input id="addr" name="addr" type="text"/>
 			</div>
-		    
+
 			<div class="submit">
 			    <label for="submit">&nbsp;</label>
 			    <button type="button" id="submit">${_("Submit")}</button>
@@ -94,7 +94,7 @@
     </div>
 </div>
 
-<script src="/yui/3.3.0/yui/yui-min.js"> </script>
+<script src="/yui3/yui/yui-min.js"> </script>
 <script type="text/javascript">
 //left menu
 YUI({ filter: 'raw' }).use("node-menunav", function(Y) {
@@ -107,7 +107,7 @@ YUI({ filter: 'raw' }).use("node-menunav", function(Y) {
 YUI({ filter: 'raw' }).use("yui", "tabview", function(Y) {
     var tabview = new Y.TabView({srcNode:'#content'});
     tabview.render();
-});   
+});
 
 //interact with server
 YUI({filter: "raw"}).use("io-form", "json-parse", function(Y) {
@@ -138,7 +138,7 @@ YUI({filter: "raw"}).use("io-form", "json-parse", function(Y) {
     };
 
     Y.on("click", onClick, "#submit", this, true);
-}); 
+});
 </script>
 
 </%def>
