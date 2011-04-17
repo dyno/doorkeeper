@@ -24,19 +24,20 @@ h1 {
 #header h1 {
     text-align: center;
     padding: 2em;
-    background-color: #ccc;
+    background-color: #4671d5;
     background-image: url("/cpk-logo.png");
     background-repeat: no-repeat;
     overflow: hidden;
 }
 
 #footer {
-    font-size: 85%;
-    background-color: #ccc;
-    border-top: solid 1px #000;
-    padding-top: .25em;
+    background-color: #4671d5;
     border-bottom: solid 1px #000;
+    border-top: solid 1px #000;
+    font-size: 85%;
     padding-bottom: .25em;
+    padding-top: .25em;
+    text-align: center;
 }
 
 /*
@@ -73,20 +74,14 @@ label {
     text-align: left;
 }
 
-/* -------------------------- */
-.aui-paginator-container {
-    margin: 30px;
+.dk-main {
+    min-height:36em;
+    height:auto !important;
+    height:36em;
 }
 
-.contentA, .contentB {
-    border:2px solid #CCCCCC;
-    font-size:15px;
-    margin:-10px 40px;
-    padding:10px;
-    width:534px;
+.dk-tab {
+    min-height:32em;
+    height:auto !important;
+    height:32em;
 }
-
-.contentA div {
-    display: none;
-}
-

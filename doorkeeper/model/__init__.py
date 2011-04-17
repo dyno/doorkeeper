@@ -15,7 +15,7 @@ user_table = Table("dk_user", metadata,
         #
         Column("roles", types.String(256)),
         #can be calculated from role, cache it.
-        Column("privileges", types.String(256)), 
+        Column("privileges", types.String(256)),
         #
         Column("master_email", types.String(128), nullable=False, index=True),
         Column("second_email", types.String(128)),
@@ -38,7 +38,7 @@ user_table = Table("dk_user", metadata,
 
 userinfo_table = Table("dk_userinfo", metadata,
         Column("id", types.Integer, primary_key=True),
-        Column("username", types.String(32), ForeignKey("dk_user.username")), 
+        Column("username", types.String(32), ForeignKey("dk_user.username")),
         #0.5 does not have Enum, http://www.sqlalchemy.org/trac/wiki/06Migration#GenericEnumType
         #Column("infotype", types.Enum(["EMAIL","PHONE", "OTHER"])),
         Column("infotype", types.String(8)),
@@ -100,7 +100,7 @@ class DKSystem(object):
     def __init__(self, key, val):
         self.key = key
         self.val = val
-        
+
 # http://www.sqlalchemy.org/docs/orm/mapper_config.html
 orm.mapper(DKUser, user_table, properties={
         "history": orm.relation(DKHistory, backref="user", lazy="select")})

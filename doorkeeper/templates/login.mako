@@ -1,7 +1,7 @@
 <%inherit file="base.html"/>
 
 <%def name="body()">
-<div class="yui3-g" style="height:40em;">
+<div class="yui3-g dk-main">
     <div class="yui3-u-1-5" >
 	<div id="side" class="yui3-menu" role="menu">
 	    <div class="yui3-menu-content">
@@ -22,8 +22,8 @@
 	    </ul>
 
 	    <div>
-		<div id="tab_login">
-		    <form id="loginform" action="main/auth" method="post">
+		<div class="dk-tab" id="tab_login">
+		    <form id="loginform" method="post">
 			<div>
 			    <label for="username">${_("Username/Email")} : &nbsp;</label>
 			    <input id="username" name="username" type="text"/>
@@ -34,13 +34,13 @@
 			</div>
 			<div class="submit">
 			    <label for="submit">&nbsp;</label>
-			    <button type="button" id="submit">${_("Submit")}</button>
+			    <button type="button" id="submit_login">${_("Submit")}</button>
 			</div>
 		    </form>
 		</div>
 
-		<div id="tab_register">
-		    <form id="registerform" action="main/register" method="post">
+		<div class="dk-tab" id="tab_register">
+		    <form id="registerform" method="post">
 			<div>
 			    <label for="username">${_("Username")} : &nbsp;</label>
 			    <input id="username" name="username" type="text"/>
@@ -84,7 +84,7 @@
 
 			<div class="submit">
 			    <label for="submit">&nbsp;</label>
-			    <button type="button" id="submit">${_("Submit")}</button>
+			    <button type="button" id="submit_register">${_("Submit")}</button>
 			</div>
 		    </form>
 		</div>
@@ -96,48 +96,75 @@
 
 <script src="/yui3/yui/yui-min.js"> </script>
 <script type="text/javascript">
-//left menu
-YUI({ filter: 'raw' }).use("node-menunav", function(Y) {
+YUI({ filter: 'raw' }).use(
+	"yui", "node", "node-menunav", "tabview",
+	"io-form", "json-parse",
+	function(Y) {
+    //left menu
     var menu = Y.one("#side");
     menu.plug(Y.Plugin.NodeMenuNav);
     menu.get("ownerDocument").get("documentElement").removeClass("yui3-loading");
-});
 
-//right tab panel
-YUI({ filter: 'raw' }).use("yui", "tabview", function(Y) {
+    //right tab panel
     var tabview = new Y.TabView({srcNode:'#content'});
     tabview.render();
-});
 
-//interact with server
-YUI({filter: "raw"}).use("io-form", "json-parse", function(Y) {
-    var onSuccess = function(id, response, args) {
-	data = Y.JSON.parse(response.responseText);
-	if(data.status == "failed") {
-	    alert("failed");
-	} else {
-	    Y.config.win.location = "/main/index";
-	}
-    };
+    //login
+    Y.one("#submit_login").on("click", function(e) {
+	var onSuccess = function(id, response, args) {
+	    data = Y.JSON.parse(response.responseText);
+	    if(data.status == "failed") {
+		alert("failed");
+	    } else {
+		Y.config.win.location = "${h.url(controller='main', action='index')}";
+	    }
+	};
 
-    var onFailure = function(id, response, args) {
-	alert("sorry!");
-    };
+	var onFailure = function(id, response, args) {
+	    alert("${_('Login failed!')}");
+	};
 
-    var onClick = function(e) {
 	var cfg = {
 	    method: "POST",
 	    form: {
 		id: "loginform",
 	    },
+	}
+
+	Y.io("${h.url(controller='auth', action='login')}", cfg);
+	Y.on('io:success', onSuccess);
+	Y.on('io:failure', onFailure);
+    });
+
+    //register
+    Y.one("#submit_register").on("click", function(e) {
+	var onSuccess = function(id, response, args) {
+	    data = Y.JSON.parse(response.responseText);
+	    if(data.status == "FAILURE") {
+		alert("${_('Register Failed!')}");
+	    } else {
+		//switch to login tab
+		tabview.selectChild(0);
+	    }
 	};
 
-        Y.io('/auth/login', cfg);
-        Y.on('io:success', onSuccess, this);
-        Y.on('io:failure', onFailure, this);
-    };
+	var onFailure = function(id, response, args) {
+	    alert("${_('Register failed!')}");
+	};
 
-    Y.on("click", onClick, "#submit", this, true);
+	var cfg = {
+	    method: "POST",
+	    form: {
+		id: "registerform",
+	    },
+	};
+
+	Y.io("${h.url(controller='auth', action='register')}", cfg);
+	Y.on('io:success', onSuccess);
+	Y.on('io:failure', onFailure);
+    });
+
+
 });
 </script>
 

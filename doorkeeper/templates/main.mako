@@ -1,25 +1,25 @@
 <%inherit file="base.html"/>
 
 <%def name="display_system_setting()">
-<div id="tab_system_setting">
+<div class="dk-tab" id="tab_system_setting">
 </div>
 </%def>
 
 <%def name="display_user_profile()">
-<div id="tab_profile">
+<div class="dk-tab" id="tab_profile">
 </div>
 </%def>
 
 <%def name="display_user_management()">
-<div id="tab_um">
-<div class="paginatorA"></div>
-<div id="user_table"> </div>
-<div class="paginatorA"></div>
+<div class="dk-tab" id="tab_um">
+    <div class="paginatorA"></div>
+    <div id="user_table"> </div>
+    <div class="paginatorA"></div>
 </div>
 </%def>
 
 <%def name="display_key_management()">
-<div id="tab_km">
+<div class="dk-tab" id="tab_km">
 </div>
 </%def>
 
@@ -45,7 +45,8 @@
 
 ##-----------------------------------------------------------------------------
 <%def name="body()">
-<div class="yui3-g" style="height:40em;">
+## http://www.dustindiaz.com/min-height-fast-hack/
+<div class="yui3-g dk-main">
     <div class="yui3-u-1-5" >
 	<div id="side" class="yui3-menu" role="menu">
 	    <div class="yui3-menu-content">
@@ -138,6 +139,7 @@ YUI({
 	    method: "POST",
 	    data: "action=" + e.target.getAttribute("action"),
 	};
+
 	var onSuccess = function(id, response, args) {
 	    r = Y.JSON.parse(response.responseText);
 	    //alert(response.responseText);

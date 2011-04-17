@@ -6,6 +6,7 @@ from pylons.controllers.util import abort, redirect
 from pylons.decorators import jsonify
 
 from doorkeeper.lib.base import BaseController, render
+from doorkeeper.lib.util import FUNC_NAME, pack_result, RS_SUCCESS, RS_FAILURE
 
 import doorkeeper.model as model
 
@@ -18,7 +19,7 @@ class AuthController(BaseController):
             return render('/login.mako')
         else:
             return render('/main.mako')
-    
+
     @jsonify
     def login(self):
         username = request.POST["username"]
@@ -29,9 +30,28 @@ class AuthController(BaseController):
             #cache user in session
             session["user"] = user
             session.save()
-            return {"status" : "ok"}
+            return pack_result(RS_SUCCESS)
         else:
-            return {"status" : "failed"}
+            return pack_result(RS_FAILURE)
+
+    @jsonify
+    def register(self):
+        user = model.DKUser()
+
+        user.username = request.POST["username"]
+        user.passwd = md5(request.POST["passwd"]).hexdigest()
+        user.master_email = request.POST["email"]
+        user.phone_mobile = request.POST["phone_mobile"]
+        user.phone_office = request.POST["phone_office"]
+        user.phone_home = request.POST["phone_home"]
+        user.org = request.POST["org"]
+        user.title = request.POST["title"]
+        user.addr = request.POST["addr"]
+
+        session = model.meta.Session
+        session.add(user)
+        session.commit()
+        return pack_result(RS_SUCCESS)
 
     def logout(self):
         session.clear()
