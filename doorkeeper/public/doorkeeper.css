@@ -5,7 +5,7 @@ body {
 }
 
 #side {
-  margin-top: 10px;
+  margin-top: 3em;
   margin-right: 10px;
 }
 
@@ -23,15 +23,14 @@ h1 {
 
 #header h1 {
     text-align: center;
-    padding: 2em;
-    background-color: #4671d5;
-    background-image: url("/cpk-logo.png");
+    height: 90px;
+    background-image: url("/banner.jpg");
     background-repeat: no-repeat;
-    overflow: hidden;
+    overflow: auto;
 }
 
 #footer {
-    background-color: #4671d5;
+    background-color: #042E58;
     border-bottom: solid 1px #000;
     border-top: solid 1px #000;
     font-size: 85%;
@@ -40,6 +39,17 @@ h1 {
     text-align: center;
 }
 
+.dk-main {
+    min-height:34em;
+    height:auto !important;
+    height:34em;
+}
+
+.dk-tab {
+    min-height:30em;
+    height:auto !important;
+    height:30em;
+}
 /*
 form, form div {
   margin: .5em 0;
@@ -74,14 +84,4 @@ label {
     text-align: left;
 }
 
-.dk-main {
-    min-height:36em;
-    height:auto !important;
-    height:36em;
-}
 
-.dk-tab {
-    min-height:32em;
-    height:auto !important;
-    height:32em;
-}
