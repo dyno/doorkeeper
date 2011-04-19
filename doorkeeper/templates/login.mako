@@ -3,6 +3,7 @@
 <%def name="body()">
 <div class="yui3-g dk-main">
     <div class="yui3-u-1-5" >
+<!--
 	<div id="side" class="yui3-menu" role="menu">
 	    <div class="yui3-menu-content">
 		<ul class="first-of-type">
@@ -12,6 +13,7 @@
 		</ul>
 	   </div>
 	</div>
+-->
     </div>
 
     <div class="yui3-u-4-5">
@@ -24,6 +26,7 @@
 	    <div>
 		<div class="dk-tab" id="tab_login">
 		    <form id="loginform" method="post">
+			<br>
 			<div>
 			    <label for="username">${_("Username/Email")} : &nbsp;</label>
 			    <input id="username" name="username" type="text"/>
@@ -36,11 +39,13 @@
 			    <label for="submit">&nbsp;</label>
 			    <button type="button" id="submit_login">${_("Submit")}</button>
 			</div>
+			<br>
 		    </form>
 		</div>
 
 		<div class="dk-tab" id="tab_register">
 		    <form id="registerform" method="post">
+			<br>
 			<div>
 			    <label for="username">${_("Username")} : &nbsp;</label>
 			    <input id="username" name="username" type="text"/>
@@ -86,6 +91,7 @@
 			    <label for="submit">&nbsp;</label>
 			    <button type="button" id="submit_register">${_("Submit")}</button>
 			</div>
+			<br>
 		    </form>
 		</div>
 
@@ -101,9 +107,9 @@ YUI({ filter: 'raw' }).use(
 	"io-form", "json-parse",
 	function(Y) {
     //left menu
-    var menu = Y.one("#side");
-    menu.plug(Y.Plugin.NodeMenuNav);
-    menu.get("ownerDocument").get("documentElement").removeClass("yui3-loading");
+//    var menu = Y.one("#side");
+//    menu.plug(Y.Plugin.NodeMenuNav);
+//    menu.get("ownerDocument").get("documentElement").removeClass("yui3-loading");
 
     //right tab panel
     var tabview = new Y.TabView({srcNode:'#content'});

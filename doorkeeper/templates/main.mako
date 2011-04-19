@@ -51,9 +51,10 @@
 	<div id="side" class="yui3-menu" role="menu">
 	    <div class="yui3-menu-content">
 		<ul class="first-of-type">
-		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("System")}</a></li>
-		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("User")}</a></li>
-		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Key")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Security Creditials")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Online Utilities")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Account Activity")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Personal Information")}</a></li>
 		</ul>
 	   </div>
 	</div>
