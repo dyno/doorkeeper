@@ -34,6 +34,11 @@ class AuthController(BaseController):
         else:
             return pack_result(RS_FAILURE)
 
+    def logout(self):
+        session.clear()
+        session.save()
+        return render('/login.mako')
+
     @jsonify
     def register(self):
         user = model.DKUser()
@@ -47,13 +52,12 @@ class AuthController(BaseController):
         user.org = request.POST["org"]
         user.title = request.POST["title"]
         user.addr = request.POST["addr"]
+        #roles is stored as ":" seperated string
+        user.roles = ":".join((meta.ROLE_USER, ))
 
         session = model.meta.Session
         session.add(user)
         session.commit()
         return pack_result(RS_SUCCESS)
 
-    def logout(self):
-        session.clear()
-        session.save()
 

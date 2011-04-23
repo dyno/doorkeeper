@@ -1,3 +1,7 @@
+<%!
+    import doorkeeper.model.meta as meta
+%>
+
 <%inherit file="base.html"/>
 
 <%def name="display_system_setting()">
@@ -24,12 +28,12 @@
 </%def>
 
 <%def name="generate_content_tabs()">
-<div  id="content">
+<div  class="yui3-loading" id="content">
     <ul>
-	<li><a href="#tab_km" class="tablabel"> ${_('Key Management')} </a></li>
-	<li><a href="#tab_um" class="tablabel"> ${_('User Management')} </a></li>
-	<li><a href="#tab_system_setting" class="tablabel"> ${_('System Setting')} </a></li>
-	<li><a href="#tab_profile" class="tablabel"> ${_('User Profile')} </a></li>
+	<li><a href="#tab_km" class="tablabel" tabkey="5"> ${_('Key Management')} </a></li>
+	<li><a href="#tab_um" class="tablabel" tabkey="1"> ${_('User Management')} </a></li>
+	<li><a href="#tab_system_setting" class="tablabel" tabkey="2"> ${_('System Setting')} </a></li>
+	<li><a href="#tab_profile" class="tablabel" tabkey="6"> ${_('User Profile')} </a></li>
     </ul>
 
     <div>
@@ -45,16 +49,19 @@
 
 ##-----------------------------------------------------------------------------
 <%def name="body()">
-## http://www.dustindiaz.com/min-height-fast-hack/
 <div class="yui3-g dk-main">
     <div class="yui3-u-1-5" >
 	<div id="side" class="yui3-menu" role="menu">
 	    <div class="yui3-menu-content">
 		<ul class="first-of-type">
-		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Security Creditials")}</a></li>
-		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Online Utilities")}</a></li>
-		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Account Activity")}</a></li>
-		    <li class="yui3-menuitem"><a class="yui3-menuitem-content">${_("Personal Information")}</a></li>
+%if ":%s:" % meta.ROLE_SYSADMIN in ":%s:" % session.get("user").roles:
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content" tabkey="1">${_("User Management")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content" tabkey="2">${_("System Management")}</a></li>
+%endif
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content" tabkey="3">${_("Online Utilities")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content" tabkey="4">${_("Account Activity")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content" tabkey="5">${_("Security Creditials")}</a></li>
+		    <li class="yui3-menuitem"><a class="yui3-menuitem-content" tabkey="6">${_("Personal Information")}</a></li>
 		</ul>
 	   </div>
 	</div>
@@ -77,7 +84,7 @@ YUI({
 	    patterns:  { 'gallery-': {} },
 	},
     }
-}).use("node-menunav",
+}).use("node-menunav", "dump",
 	"yui", "tabview",
 	"io-form", "json-parse",
 	"datatable", "dataschema-array",
@@ -85,17 +92,92 @@ YUI({
 	"gallery-aui-paginator",
 	function(Y) {
 //---------------------------------------------------------------------
+    tabs = {}; tabs_hidden = [];
+
 //left menu
     var menu = Y.one("#side");
     menu.plug(Y.Plugin.NodeMenuNav);
     menu.get("ownerDocument").get("documentElement").removeClass("yui3-loading");
 
+    Y.all(".yui3-menuitem-content").on("click", function(e) {
+	tabkey = e.target.getAttribute("tabkey");
+	tab = tabs[tabkey];
+	tab.get("contentBox").removeClass("yui3-tab-hidden");
+	tab.get("boundingBox").removeClass("yui3-tab-hidden");
+	tab.set("selected", 1);
+	//remove tab from tabs_hidden
+	var idx = tabs_hidden.indexOf(tabkey);
+	if(idx != -1) {
+	    tabs_hidden.splice(idx, 1);
+	};
+    });
+
 //---------------------------------------------------------------------
     //right tab panel
+
+    var Removeable = function(config) {
+	Removeable.superclass.constructor.apply(this, arguments);
+    };
+
+    Removeable.NAME = 'removeableTabs';
+    Removeable.NS = 'removeable';
+
+    Y.extend(Removeable, Y.Plugin.Base, {
+	REMOVE_TEMPLATE: '<a class="yui3-tab-remove" title="remove tab">x</a>',
+
+	initializer: function(config) {
+	    var tabview = this.get('host');
+	    var	cb = tabview.get('contentBox');
+
+	    cb.addClass('yui3-tabview-removeable');
+	    cb.delegate('click', this.onRemoveClick, '.yui3-tab-remove', this);
+
+	    // Tab events bubble to TabView
+	    tabview.after('tab:render', this.afterTabRender, this);
+	},
+
+	onRemoveClick: function(e) {
+	    e.stopPropagation();
+	    var tab = Y.Widget.getByNode(e.target);
+	    if (tab &&
+		    //not last visible tab
+		    (tabs_hidden.length != Object.keys(tabs).length - 1)) {
+		tab.get("contentBox").addClass("yui3-tab-hidden");
+		tab.get("boundingBox").addClass("yui3-tab-hidden");
+		var tabkey = tab.get("boundingBox").one("a").getAttribute("tabkey");
+		tabs_hidden.push(tabkey);
+		//if the target is the selected one, the focus on the first visible.
+		if (tab.get("selected")) {
+		    for(var key in tabs) {
+			if (tabs_hidden.indexOf(key) == -1) {
+			    tabs[key].set("selected", 1);
+			    break;
+			}
+		    }
+		}
+	    };
+	},
+
+	afterTabRender: function(e) {
+	    // boundingBox is the Tab's LI
+	    e.target.get('boundingBox').append(this.REMOVE_TEMPLATE);
+	},
+
+    });
+
     var tabview = new Y.TabView({
 	srcNode:'#content',
+	plugins: [Removeable],
     });
+
     tabview.render();
+    Y.one("#content").removeClass("yui3-loading");
+
+    // establish connection between menu & tab
+    tabview.each(function(tab) {
+	tabkey = tab.get("boundingBox").one("a").getAttribute("tabkey");
+	tabs[tabkey] = tab;
+    });
 
 //---------------------------------------------------------------------
     //tabview.item(2).set("selected", 1);
@@ -148,7 +230,6 @@ YUI({
 		alert("done!");
 	    } else {
 		alert(r.message);
-		//Y.config.win.location = "/main/index";
 	    }
 	};
 
